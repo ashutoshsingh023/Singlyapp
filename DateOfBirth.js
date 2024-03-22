@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,15 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+import {AppContext} from './appContext/Context';
 
 const DateOfBirth = ({navigation}) => {
   const [dob, setDob] = useState('');
+  const {data} = useContext(AppContext);
+  
+  console.log('====================================');
+  console.log('data', data);
+  console.log('====================================');
 
   const handleContinue = () => {
     // Validate date of birth input
@@ -58,7 +64,7 @@ const DateOfBirth = ({navigation}) => {
           style={styles.input}
           placeholder="YYYY-MM-DD"
           value={dob}
-          onChangeText={setDob}
+          onChangeText={e => setDob(e.target.value)}
           keyboardType="numeric"
           maxLength={10}
         />

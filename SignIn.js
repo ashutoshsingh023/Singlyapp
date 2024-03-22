@@ -16,6 +16,8 @@ const SignIn = ({navigation}) => {
   const [lastName, setLastName] = useState('');
 
   const handleContinue = () => {
+    navigation.navigate('Name');
+
     // Trim whitespace from email, password, first name, and last name
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
@@ -49,10 +51,10 @@ const SignIn = ({navigation}) => {
     }
 
     // Check if passwords match
-    if (trimmedPassword !== trimmedConfirmPassword) {
-      alert('Passwords do not match.');
-      return;
-    }
+    // if (trimmedPassword !== trimmedConfirmPassword) {
+    //   alert('Passwords do not match.');
+    //   return;
+    // }
 
     // If all validations pass, send a POST request to the registration API
     fetch('https://synglys.arvtec.com/api/registration', {
@@ -63,8 +65,8 @@ const SignIn = ({navigation}) => {
       body: JSON.stringify({
         email: trimmedEmail,
         password: trimmedPassword,
-        first_name: trimmedFirstName,
-        last_name: trimmedLastName,
+        // first_name: trimmedFirstName,
+        // last_name: trimmedLastName,
       }),
     })
       .then(response => {
@@ -121,7 +123,7 @@ const SignIn = ({navigation}) => {
           onChangeText={setConfirmPassword}
           underlineColorAndroid="transparent"
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="First Name"
           placeholderTextColor="#ccc"
@@ -136,7 +138,7 @@ const SignIn = ({navigation}) => {
           value={lastName}
           onChangeText={setLastName}
           underlineColorAndroid="transparent"
-        />
+        /> */}
       </View>
       <View>
         <TouchableOpacity style={styles.button} onPress={handleContinue}>

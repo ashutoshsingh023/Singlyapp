@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 
-const Name = ({ navigation }) => {
+const Name = ({navigation}) => {
   const [name, setName] = useState('');
 
-  const handleContinue = () => {
-    // Validate name input
-    if (name.trim() === '') {
-      alert('Please enter your name.');
-      return;
-    }
+  // const handleContinue = () => {
+  //   // Validate name input
+  //   if (name.trim() === '') {
+  //     alert('Please enter your name.');
+  //     return;
+  //   }
 
-    // Perform POST request to submit registration data
-    fetch('https://synglys.arvtec.com/api/registration', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({name}), // Include name in the request body
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle response from the server
-        console.log('Response:', data);
-        // Navigate to the next screen
-        navigation.navigate('DateOfBirth');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle error
-        alert(
-          'An error occurred while submitting your name. Please try again.',
-        );
-      });
-  };
+  //   // Perform POST request to submit registration data
+  //   fetch('https://synglys.arvtec.com/api/registration', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({name}), // Include name in the request body
+  //   })
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       // Handle response from the server
+  //       console.log('Response:', data);
+  //       // Navigate to the next screen
+  //       navigation.navigate('DateOfBirth');
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //       // Handle error
+  //       alert(
+  //         'An error occurred while submitting your name. Please try again.',
+  //       );
+  //     });
+  // };
 
   return (
     <ImageBackground
@@ -56,7 +63,7 @@ const Name = ({ navigation }) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={handleContinue}>
+        onPress={() => navigation.navigate('DateOfBirth')}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </ImageBackground>
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 370,
     marginLeft: 22,
-    width: "90%",
+    width: '90%',
   },
   buttonText: {
     color: '#fff',
