@@ -5,9 +5,12 @@ export const AppContext = createContext();
 const SinglyProvider = ({children}) => {
   const data = {
     name:"",
-    date: '',
-    dummy:"",
-    dummy:"",
+    dateofbirth: "",
+    gender: "",
+    passion: "",
+    ideal: "",
+    photo:"",
+    location: "",
   };
   const SignInData  = {
     email : "",

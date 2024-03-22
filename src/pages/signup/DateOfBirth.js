@@ -7,12 +7,12 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import {AppContext} from './appContext/Context';
+import {AppContext} from '../../../appContext/Context';
 
 const DateOfBirth = ({navigation}) => {
   const [dob, setDob] = useState('');
   const {data} = useContext(AppContext);
-  
+
   console.log('====================================');
   console.log('data', data);
   console.log('====================================');

@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SplashScreen from './SplashScreen';
-import SignUp from './SignUp';
-import SignIn from './SignIn';
-import Name from  './Name';
-import DateOfBirth from './DateOfBirth';
-import Gender from './Gender';
-import Passion from './Passion';
-import Ideal from './Ideal';
-import Photo from './Photo';
-import Login from './Login';
-import Dashboard from './Dashboard';
-import Location from './Location';
+import SplashScreen from './src/pages/SplashScreen';
+import SignUp from './src/pages/SignUp';
+import SignIn from './src/pages/SignIn';
+import Name from './src/pages/signup/Name';
+import DateOfBirth from './src/pages/signup/DateOfBirth';
+import Gender from './src/pages/signup/Gender';
+import Passion from './src/pages/signup/Passion';
+import Ideal from './src/pages/signup/Ideal';
+import Photo from './src/pages/signup/Photo';
+import Login from './src/pages/Login';
+import Dashboard from './src/pages/Dashboard';
+import Location from './src/pages/signup/Location';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,4 +40,4 @@ const App = () => {
   );
 };
 
-export default  App;
+export default App;
