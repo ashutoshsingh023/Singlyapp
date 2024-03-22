@@ -1,16 +1,57 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 
-const DateOfBirth = ({ navigation }) => {
+const DateOfBirth = ({navigation}) => {
   const [dob, setDob] = useState('');
 
-  const Gender = ({ DateOfBirth }) => {
-    // Handle form submission here
-    alert(`Check your date of birth again, as you cannot change your date of birth in your whole life., ${DateOfBirth}!`);
+  const handleContinue = () => {
+    // Validate date of birth input
+    if (dob.trim() === '') {
+      alert('Please enter your date of birth.');
+      return;
+    }
+
+    // Perform POST request to submit registration data
+    fetch('your-api-endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({dob}), // Include date of birth in the request body
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle response from the server
+        console.log('Response:', data);
+        // Navigate to the next screen
+        navigation.navigate('Gender');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle error
+        alert(
+          'An error occurred while submitting your date of birth. Please try again.',
+        );
+      });
   };
 
   return (
-    <ImageBackground source={require('./img/bgsingly.jpg')} style={styles.background} blurRadius={25}>
+    <ImageBackground
+      source={require('./img/bgsingly.jpg')}
+      style={styles.background}
+      blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>What's your Date of Birth?</Text>
         <TextInput
@@ -21,15 +62,10 @@ const DateOfBirth = ({ navigation }) => {
           keyboardType="numeric"
           maxLength={10}
         />
-        </View>
-        <View style={styles.button} >
-        <TouchableOpacity onPress={() =>
-        navigation.navigate('Gender')
-      }>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-        </View>
-      
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleContinue}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -41,7 +77,6 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 10,
-    // alignItems: 'center',
   },
   title: {
     fontSize: 34,
@@ -66,15 +101,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 370,
-    marginLeft:22,
-    width: "90%",
-
+    marginLeft: 22,
+    width: '90%',
   },
   buttonText: {
     color: '#fff',
     fontSize: 20,
   },
-
 });
 
 export default DateOfBirth;

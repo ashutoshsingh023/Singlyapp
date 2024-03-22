@@ -1,35 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, TextInput } from 'react-native';
 
 const Name = ({ navigation }) => {
   const [name, setName] = useState('');
 
-  const handleNameChange = (text) => {
-    setName(text);
-  };
+  const handleContinue = () => {
+    // Validate name input
+    if (name.trim() === '') {
+      alert('Please enter your name.');
+      return;
+    }
 
-  const handleSubmit = ({ name }) => {
-    // Handle form submission here
-    alert(`Please Enter Your Name, ${name}!`);
+    // Perform POST request to submit registration data
+    fetch('https://synglys.arvtec.com/api/registration', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({name}), // Include name in the request body
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle response from the server
+        console.log('Response:', data);
+        // Navigate to the next screen
+        navigation.navigate('DateOfBirth');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle error
+        alert(
+          'An error occurred while submitting your name. Please try again.',
+        );
+      });
   };
 
   return (
-    <ImageBackground source={require('./img/bgsingly.jpg')} style={styles.background} blurRadius={25}
-    >
+    <ImageBackground
+      source={require('./img/bgsingly.jpg')}
+      style={styles.background}
+      blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>What's your name?</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter your name"
-          onChangeText={handleNameChange}
+          onChangeText={setName}
           value={name}
         />
-        </View>
-        <View style={styles.button}>
-        <TouchableOpacity onPress={() =>navigation.navigate('DateOfBirth')}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-        </View>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleContinue}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -38,29 +67,25 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
   },
   container: {
     padding: 10,
-    // alignItems: 'center',
-
   },
   title: {
     fontSize: 34,
-    marginBottom: 45,
+    marginBottom: 20,
     marginTop: 100,
     color: '#fff',
-
   },
   input: {
     width: '100%',
-    padding: 12,
     marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
     borderRadius: 5,
-    borderColor: '#ccc',
-    borderWidth: 2,
-    fontSize: 16,
-    
+    color: '#fff',
+    fontSize: 18,
   },
   button: {
     backgroundColor: 'red',
@@ -69,15 +94,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 370,
-    marginLeft:22,
+    marginLeft: 22,
     width: "90%",
-
   },
   buttonText: {
     color: '#fff',
     fontSize: 20,
   },
-
 });
 
 export default Name;

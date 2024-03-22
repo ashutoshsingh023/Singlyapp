@@ -19,15 +19,43 @@ const Gender = ({navigation}) => {
   };
 
   const handleSubmit = () => {
-    // Handle form submission here
+    // Find the selected gender
     const selectedGender = Object.keys(selectedOption).find(
       key => selectedOption[key],
     );
-    if (selectedGender) {
-      alert(`Your selected gender is: ${selectedGender}`);
-    } else {
+
+    if (!selectedGender) {
       alert('Please select a gender');
+      return;
     }
+
+    // Perform POST request to submit selected gender
+    fetch('your-api-endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({gender: selectedGender}), // Include selected gender in the request body
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle response from the server
+        console.log('Response:', data);
+        // Navigate to the next screen
+        navigation.navigate('Passion');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle error
+        alert(
+          'An error occurred while submitting your selected gender. Please try again.',
+        );
+      });
   };
 
   return (
@@ -53,9 +81,7 @@ const Gender = ({navigation}) => {
           ))}
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Passion')}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -68,12 +94,10 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
   },
   container: {
     padding: 20,
     borderRadius: 10,
-    // alignItems: 'center',
   },
   title: {
     fontSize: 34,
@@ -86,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 250,
   },
   optionButton: {
-    background: 'Transparent',
+    backgroundColor: 'transparent',
     borderColor: '#FF4F4F',
     borderWidth: 1,
     height: 50,
@@ -106,7 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 120,
-    // marginTop: 5,
   },
   buttonContainer: {
     marginTop: 25,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,113 +6,145 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Modal
+  Modal,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import axios from 'axios';
 
-const Photo = ({navigation}) => {
+const Photo = ({ navigation }) => {
   const [photos, setPhotos] = useState([]);
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false); 
+  const [image, setImage] = useState(null);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-  const handlePhotoPress = async () => {
-    const {status} = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Permission to access camera roll is required!');
+  useEffect(() => {
+    if (image && image !== undefined && image !== null) {
+      setPhotos((photos) => [...photos, image]);
+      setImage();
+    }
+  }, [image]);
+
+  const openImagePicker = () => {
+    ImagePicker.openPicker({
+      width: 500,
+      height: 720,
+      cropping: true,
+    }).then((image) => {
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImage(imageUri);
+      setIsDropdownVisible(false);
+    });
+  };
+
+  const handleCameraLaunch = async () => {
+    ImagePicker.openCamera({
+      width: 200,
+      height: 300,
+      cropping: true,
+    }).then((image) => {
+      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+      setImage(imageUri);
+      setIsDropdownVisible(false);
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (photos.length === 0) {
+      alert('Please select at least one photo.');
       return;
     }
 
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.5,
-    });
+    try {
+      const formData = new FormData();
+      photos.forEach((photo, index) => {
+        formData.append(`photo${index}`, {
+          uri: photo,
+          type: 'image/jpeg',
+          name: `photo${index}.jpg`,
+        });
+      });
 
-    if (!result.cancelled) {
-      setPhotos([...photos, {uri: result.uri}]);
+      const response = await axios.post(
+        'your-api-endpoint',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.data.success) {
+        navigation.navigate('Location');
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error submitting photos:', error);
+      alert('An error occurred while submitting your photos. Please try again.');
     }
   };
 
-  const handleContinuePress = ({Photo}) => {
-
-     
-  };
-  const openImagePicker = () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('Image picker error: ', response.error);
-      } else {
-        let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage(imageUri);
-      }
-    });
-  };
-   const handleCameraLaunch =  async () => {
-  await ImagePicker.openCamera({
-    width: 300,
-    height: 400,
-    cropping: true,
-  }).then(image => {
-    console.log(image);
-  });
-      };
-  
- 
   return (
     <ImageBackground
       source={require('./img/bgsingly.jpg')}
       style={styles.backgroundImage}
-      blurRadius={25}>
+      blurRadius={25}
+    >
       <Text style={styles.title}>Add Your Best Photos</Text>
       <View style={styles.container}>
         <View style={styles.photosContainer}>
           {photos.map((photo, index) => (
-            <Image key={index} source={photo} style={styles.photo} />
-          ))}
-          {[...Array(4 - photos.length)].map((_, index) => (
-            <TouchableOpacity
+            <Image
               key={index}
-              onPress={() => setIsDropdownVisible(true)}>
+              source={{ uri: photo }}
+              style={styles.photo}
+            />
+          ))}
+          {photos.length !== 4 && (
+            <TouchableOpacity
+              onPress={() => setIsDropdownVisible(true)}
+            >
               <View style={styles.addPhotoButton}>
                 <Text style={styles.addPhotoButtonText}>+</Text>
               </View>
             </TouchableOpacity>
-          ))}
+          )}
           <Modal
             visible={isDropdownVisible}
             transparent={true}
             animationType="slide"
-            onRequestClose={() => setIsDropdownVisible(false)}>
+            onRequestClose={() => setIsDropdownVisible(false)}
+          >
             <View style={styles.dropdownContainer}>
               <TouchableOpacity
+                onPress={() => setIsDropdownVisible(false)}
+                style={{ justifyContent: 'flex-end', width: '100%' }}
+              >
+                <Text>X</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={styles.dropdownItem}
-                onPress={openImagePicker}>
+                onPress={openImagePicker}
+              >
                 <Text style={styles.dropdownText}>GALLERY</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.dropdownItem}
-                onPress={handleCameraLaunch}>
+                onPress={handleCameraLaunch}
+              >
                 <Text style={styles.dropdownText}>CAMERA</Text>
               </TouchableOpacity>
             </View>
           </Modal>
         </View>
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Location')}
-          disabled={photos.length !== 4}
-          color={photos.length === 4}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit}
+        disabled={photos.length !== 4}
+      >
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -145,21 +177,22 @@ const styles = StyleSheet.create({
     // padding: 10,
   },
   photo: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    height: '100%',
     // margin: 5,
   },
   addPhotoButton: {
     width: 130,
     height: 130,
     background: 'Transparent',
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: '#ff4f4f',
     borderRadius: 10,
     justifyContent: 'center',
     // marginTop: 80,
     alignItems: 'center',
     margin: 13,
+    overflow: 'hidden',
   },
   addPhotoButtonText: {
     fontSize: 30,

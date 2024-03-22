@@ -6,7 +6,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import axios from 'axios';
 
@@ -20,7 +19,6 @@ const Passion = ({navigation}) => {
         'https://synglys.arvtec.com/api/passion',
       );
       setOrientation(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.error('Error fetching orientation', error);
     }
@@ -32,21 +30,46 @@ const Passion = ({navigation}) => {
 
   const handleInterestSelect = interest => {
     if (selectedInterests.includes(interest)) {
-      // If already selected, deselect it
       setSelectedInterests(selectedInterests.filter(item => item !== interest));
     } else {
-      // If not selected, add it
       setSelectedInterests([...selectedInterests, interest]);
     }
   };
 
-  const continueButtonPressed = () => {
+  const continueButtonPressed = async () => {
     if (selectedInterests.length < 3) {
       alert('Please select at least three interests.');
       return;
     }
 
-    navigation.navigate('Ideal');
+    try {
+      // Perform POST request to submit selected interests
+      const response = await axios.post('your-api-endpoint', {
+        interests: selectedInterests,
+      });
+
+      // Handle response from the server
+      if (response.status === 200) {
+        // Server response was successful
+        console.log('Response:', response.data);
+        // Optionally, you can navigate to the next screen here
+        navigation.navigate('Ideal');
+      } else {
+        // Server response was not successful
+        console.error('Error:', response.statusText);
+        // Display an error alert
+        alert(
+          'An error occurred while submitting your selected interests. Please try again.',
+        );
+      }
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error('Error:', error);
+      // Display an error alert
+      alert(
+        'An error occurred while submitting your selected interests. Please try again.',
+      );
+    }
   };
 
   return (
@@ -74,13 +97,9 @@ const Passion = ({navigation}) => {
           </View>
         </ScrollView>
       </View>
-      <View style={styles.Button}>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={continueButtonPressed}>
-          <Text style={styles.ButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.Button} onPress={continueButtonPressed}>
+        <Text style={styles.ButtonText}>Continue</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -120,7 +139,7 @@ const styles = StyleSheet.create({
     borderColor: '#FF4F4F',
     borderWidth: 1,
     margin: 6,
-    width: '45%', // Adjusted width to fit two buttons in a row
+    width: '45%',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -135,7 +154,6 @@ const styles = StyleSheet.create({
     color: '#ccc',
     fontWeight: 'bold',
   },
-  //Continue
   Button: {
     backgroundColor: '#FF4F4F',
     paddingVertical: 12,

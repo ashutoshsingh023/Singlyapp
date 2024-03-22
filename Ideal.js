@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   ImageBackground,
   StyleSheet,
-  Alert,
   FlatList,
+  Alert,
 } from 'react-native';
 import axios from 'axios';
-import Photo from './Photo';
 
 const Ideal = ({navigation}) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -21,7 +20,6 @@ const Ideal = ({navigation}) => {
         'https://synglys.arvtec.com/api/show-sexual-orientation',
       );
       setOrientation(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.error('Error fetching orientation:', error);
     }
@@ -35,16 +33,35 @@ const Ideal = ({navigation}) => {
     setSelectedOption(option === selectedOption ? null : option);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission here
+  const handleSubmit = async () => {
     if (selectedOption) {
-      navigation.navigate('Photo');
+      try {
+        const response = await axios.post('your-api-endpoint', {
+          orientation: selectedOption,
+        });
+        console.log('Response:', response.data);
+        // Handle response from the server
+        if (response.data.success) {
+          // Navigate to the next screen
+          navigation.navigate('Photo');
+        } else {
+          // Handle server errors or invalid response
+          Alert.alert('Error', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error submitting sexual orientation:', error);
+        Alert.alert(
+          'Error',
+          'An error occurred while submitting your sexual orientation. Please try again.',
+        );
+      }
     } else {
-      alert('Please select an Ideal You Have too Interested');
+      Alert.alert(
+        'Selection Required',
+        'Please select an ideal you are interested in.',
+      );
     }
   };
-
-  console.log('orientation', orientation);
 
   const renderItem = ({item}) => {
     return (
@@ -78,7 +95,7 @@ const Ideal = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.secondaryButton]}
-          onPress={() => navigation.goBack(Photo)}>
+          onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
