@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, ImageBackground, Image, StyleSheet } from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {View, ImageBackground, Image, StyleSheet} from 'react-native';
+import {AppContext} from '../appContext/Context';
 
-const SplashScreen = ({ navigation }) => {
+const SplashScreen = ({navigation}) => {
+  const {data, IMG_BG} = useContext(AppContext);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       // Navigate to the next screen after 5 seconds
@@ -11,9 +14,12 @@ const SplashScreen = ({ navigation }) => {
     return () => clearTimeout(timer); // Clean up the timer
   }, [navigation]);
   return (
-    <ImageBackground source={require('./img/bgsingly.jpg')} style={styles.background} blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
-        <Image source={require('./img/logo_new.png')} style={styles.logo} />
+        <Image
+          source={require('../assets/img/logo_new.png')}
+          style={styles.logo}
+        />
       </View>
     </ImageBackground>
   );

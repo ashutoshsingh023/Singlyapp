@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,11 @@ import {
   ScrollView,
 } from 'react-native';
 import axios from 'axios';
+import {AppContext} from '../../appContext/Context';
 
 const Passion = ({navigation}) => {
+  const {data, setData, IMG_BG} = useContext(AppContext);
+
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [orientation, setOrientation] = useState([]);
 
@@ -40,41 +43,15 @@ const Passion = ({navigation}) => {
     if (selectedInterests.length < 3) {
       alert('Please select at least three interests.');
       return;
-    }
-
-    try {
-      // Perform POST request to submit selected interests
-      const response = await axios.post('your-api-endpoint', {
-        interests: selectedInterests,
-      });
-
-      // Handle response from the server
-      if (response.status === 200) {
-        // Server response was successful
-        console.log('Response:', response.data);
-        // Optionally, you can navigate to the next screen here
-        navigation.navigate('Ideal');
-      } else {
-        // Server response was not successful
-        console.error('Error:', response.statusText);
-        // Display an error alert
-        alert(
-          'An error occurred while submitting your selected interests. Please try again.',
-        );
-      }
-    } catch (error) {
-      // Handle network errors or other exceptions
-      console.error('Error:', error);
-      // Display an error alert
-      alert(
-        'An error occurred while submitting your selected interests. Please try again.',
-      );
+    } else {
+      navigation.navigate('Ideal');
+      setData({...data, passion: selectedInterests});
     }
   };
 
   return (
     <ImageBackground
-      source={require('./img/bgsingly.jpg')}
+      source={IMG_BG}
       style={styles.backgroundImage}
       blurRadius={25}>
       <View style={styles.container}>

@@ -1,8 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, useContext} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {AppContext} from '../appContext/Context';
 
 export class Dashboard extends Component {
   render() {
+    const {data, IMG_BG} = useContext(AppContext);
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -10,7 +13,7 @@ export class Dashboard extends Component {
         </View>
         <View style={styles.profileContainer}>
           <Image
-            source={require('./img/bgsingly.jpg')} // Provide your profile picture source
+            source={IMG_BG} // Provide your profile picture source
             style={styles.profilePicture}
           />
           <Text style={styles.profileName}>John Doe</Text>

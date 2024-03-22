@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,11 @@ import {
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import {AppContext} from '../../appContext/Context';
 
 const Location = () => {
+  const {data, IMG_BG} = useContext(AppContext);
+
   const [locationEnabled, setLocationEnabled] = useState(false);
 
   useEffect(() => {
@@ -90,9 +93,7 @@ const Location = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.backgroundImage}>
+    <ImageBackground source={IMG_BG} style={styles.backgroundImage}>
       <View style={styles.container}>
         {locationEnabled ? (
           <Text style={styles.text}>Location Enabled!</Text>

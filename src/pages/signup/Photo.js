@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,15 +10,18 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from 'axios';
+import {AppContext} from '../../appContext/Context';
 
-const Photo = ({ navigation }) => {
+const Photo = ({navigation}) => {
+  const {data, IMG_BG} = useContext(AppContext);
+
   const [photos, setPhotos] = useState([]);
   const [image, setImage] = useState(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   useEffect(() => {
     if (image && image !== undefined && image !== null) {
-      setPhotos((photos) => [...photos, image]);
+      setPhotos(photos => [...photos, image]);
       setImage();
     }
   }, [image]);
@@ -28,7 +31,7 @@ const Photo = ({ navigation }) => {
       width: 500,
       height: 720,
       cropping: true,
-    }).then((image) => {
+    }).then(image => {
       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
       setImage(imageUri);
       setIsDropdownVisible(false);
@@ -40,7 +43,7 @@ const Photo = ({ navigation }) => {
       width: 200,
       height: 300,
       cropping: true,
-    }).then((image) => {
+    }).then(image => {
       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
       setImage(imageUri);
       setIsDropdownVisible(false);
@@ -63,15 +66,11 @@ const Photo = ({ navigation }) => {
         });
       });
 
-      const response = await axios.post(
-        'your-api-endpoint',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const response = await axios.post('your-api-endpoint', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.data.success) {
         navigation.navigate('Location');
@@ -80,30 +79,25 @@ const Photo = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Error submitting photos:', error);
-      alert('An error occurred while submitting your photos. Please try again.');
+      alert(
+        'An error occurred while submitting your photos. Please try again.',
+      );
     }
   };
 
   return (
     <ImageBackground
-      source={require('./img/bgsingly.jpg')}
+      source={IMG_BG}
       style={styles.backgroundImage}
-      blurRadius={25}
-    >
+      blurRadius={25}>
       <Text style={styles.title}>Add Your Best Photos</Text>
       <View style={styles.container}>
         <View style={styles.photosContainer}>
           {photos.map((photo, index) => (
-            <Image
-              key={index}
-              source={{ uri: photo }}
-              style={styles.photo}
-            />
+            <Image key={index} source={{uri: photo}} style={styles.photo} />
           ))}
           {photos.length !== 4 && (
-            <TouchableOpacity
-              onPress={() => setIsDropdownVisible(true)}
-            >
+            <TouchableOpacity onPress={() => setIsDropdownVisible(true)}>
               <View style={styles.addPhotoButton}>
                 <Text style={styles.addPhotoButtonText}>+</Text>
               </View>
@@ -113,25 +107,21 @@ const Photo = ({ navigation }) => {
             visible={isDropdownVisible}
             transparent={true}
             animationType="slide"
-            onRequestClose={() => setIsDropdownVisible(false)}
-          >
+            onRequestClose={() => setIsDropdownVisible(false)}>
             <View style={styles.dropdownContainer}>
               <TouchableOpacity
                 onPress={() => setIsDropdownVisible(false)}
-                style={{ justifyContent: 'flex-end', width: '100%' }}
-              >
+                style={{justifyContent: 'flex-end', width: '100%'}}>
                 <Text>X</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.dropdownItem}
-                onPress={openImagePicker}
-              >
+                onPress={openImagePicker}>
                 <Text style={styles.dropdownText}>GALLERY</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.dropdownItem}
-                onPress={handleCameraLaunch}
-              >
+                onPress={handleCameraLaunch}>
                 <Text style={styles.dropdownText}>CAMERA</Text>
               </TouchableOpacity>
             </View>
@@ -141,8 +131,7 @@ const Photo = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit}
-        disabled={photos.length !== 4}
-      >
+        disabled={photos.length !== 4}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </ImageBackground>

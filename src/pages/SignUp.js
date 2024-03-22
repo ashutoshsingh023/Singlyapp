@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -7,77 +7,91 @@ import {
   Image,
   ImageBackground,
   StyleSheet,
-  Modal
-} from "react-native";
+  Modal,
+} from 'react-native';
+import {AppContext} from '../appContext/Context';
 
-const SignUp = ({navigation} ) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false); 
-  const handleSignUp = ({ navigation }) => {
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
+const SignUp = ({navigation}) => {
+  const {setData, IMG_BG} = useContext(AppContext);
+
+  
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const handleSignUp = ({navigation}) => {
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
     // use the signup logic
   };
   return (
-    <><><View style={styles.container}>
-      {/* First Part */}
-      <View style={styles.firstPart}>
-        <Image source={require('./img/singlys_splash_image.png')} style={styles.logo} />
-        <View style={styles.divider}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() =>navigation.navigate('Login')} style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-            
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')} style={styles.button}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
+    <>
+      <>
+        <View style={styles.container}>
+          {/* First Part */}
+          <View style={styles.firstPart}>
+            <Image
+              source={require('../assets/img/singlys_splash_image.png')}
+              style={styles.logo}
+            />
+            <View style={styles.divider}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Login')}
+                  style={styles.button}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
 
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('SignIn')}
+                  style={styles.button}>
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
 
-          <View style={styles.border}>
-          <View style={styles.languageContainer}>
-            <Text style={styles.languageText}>Language</Text>
-            <TouchableOpacity style={styles.languageButton}  onPress={() => setIsDropdownVisible(true)}>
-              <Text style={styles.languageButtonText}>English</Text>
-              </TouchableOpacity>
+                <View style={styles.border}>
+                  <View style={styles.languageContainer}>
+                    <Text style={styles.languageText}>Language</Text>
+                    <TouchableOpacity
+                      style={styles.languageButton}
+                      onPress={() => setIsDropdownVisible(true)}>
+                      <Text style={styles.languageButtonText}>English</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Modal
+                    visible={isDropdownVisible}
+                    transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => setIsDropdownVisible(false)}>
+                    <View style={styles.dropdownContainer}>
+                      <TouchableOpacity
+                        style={styles.dropdownItem}
+                        onPress={() => setIsDropdownVisible(false)}>
+                        <Text style={styles.dropdownText}>German</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.dropdownItem}
+                        onPress={() => setIsDropdownVisible(false)}>
+                        <Text style={styles.dropdownText}>Hungarian</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </Modal>
+                </View>
               </View>
-              <Modal
-        visible={isDropdownVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsDropdownVisible(false)}
-      >
-        <View style={styles.dropdownContainer}>
-          <TouchableOpacity style={styles.dropdownItem} onPress={() => setIsDropdownVisible(false)}>
-            <Text style={styles.dropdownText}>German</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.dropdownItem} onPress={() => setIsDropdownVisible(false)}>
-            <Text style={styles.dropdownText}>Hungarian</Text>
-          </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Second Part */}
+          <View style={styles.secondPart}></View>
         </View>
-      </Modal>
-          </View>
-          </View>
-        </View> 
-      </View>
-
-      {/* Second Part */}
-      <View style={styles.secondPart}>
-     
-      </View>
-    </View></>
-    
-
-  <ImageBackground
-    source={require('./img/bgsingly.jpg')}
-    style={styles.imgbackground}>
-  </ImageBackground>
       </>
-    );
+
+      <ImageBackground
+        source={IMG_BG}
+        style={styles.imgbackground}></ImageBackground>
+    </>
+  );
 };
 
 const styles = StyleSheet.create({

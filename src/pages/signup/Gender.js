@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,11 @@ import {
   ImageBackground,
   StyleSheet,
 } from 'react-native';
+import {AppContext} from '../../appContext/Context';
 
 const Gender = ({navigation}) => {
+  const {data, setData, IMG_BG} = useContext(AppContext);
+
   const [selectedOption, setSelectedOption] = useState({
     male: false,
     female: false,
@@ -23,46 +26,45 @@ const Gender = ({navigation}) => {
     const selectedGender = Object.keys(selectedOption).find(
       key => selectedOption[key],
     );
-
     if (!selectedGender) {
       alert('Please select a gender');
       return;
+    } else {
+      navigation.navigate('passion');
+      setData({...data, gender: selectedGender});
     }
 
     // Perform POST request to submit selected gender
-    fetch('your-api-endpoint', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({gender: selectedGender}), // Include selected gender in the request body
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle response from the server
-        console.log('Response:', data);
-        // Navigate to the next screen
-        navigation.navigate('Passion');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle error
-        alert(
-          'An error occurred while submitting your selected gender. Please try again.',
-        );
-      });
+    // fetch('your-api-endpoint', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({gender: selectedGender}), // Include selected gender in the request body
+    // })
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     // Handle response from the server
+    //     console.log('Response:', data);
+    //     // Navigate to the next screen
+
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //     // Handle error
+    //     alert(
+    //       'An error occurred while submitting your selected gender. Please try again.',
+    //     );
+    //   });
   };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>Select Your Gender</Text>
         <View style={styles.optionsContainer}>

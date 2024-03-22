@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -7,51 +7,19 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+import {AppContext} from '../../appContext/Context';
 
 const Name = ({navigation}) => {
   const [name, setName] = useState('');
+  const {data, setData, IMG_BG} = useContext(AppContext);
 
-  // const handleContinue = () => {
-  //   // Validate name input
-  //   if (name.trim() === '') {
-  //     alert('Please enter your name.');
-  //     return;
-  //   }
-
-  //   // Perform POST request to submit registration data
-  //   fetch('https://synglys.arvtec.com/api/registration', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({name}), // Include name in the request body
-  //   })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       // Handle response from the server
-  //       console.log('Response:', data);
-  //       // Navigate to the next screen
-  //       navigation.navigate('DateOfBirth');
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //       // Handle error
-  //       alert(
-  //         'An error occurred while submitting your name. Please try again.',
-  //       );
-  //     });
-  // };
+  const handleContinue = () => {
+    setData({...data, name: name});
+    navigation.navigate('DateOfBirth');
+  };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>What's your name?</Text>
         <TextInput
@@ -61,9 +29,7 @@ const Name = ({navigation}) => {
           value={name}
         />
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('DateOfBirth')}>
+      <TouchableOpacity style={styles.button} onPress={handleContinue}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </ImageBackground>

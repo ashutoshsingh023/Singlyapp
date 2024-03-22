@@ -29,8 +29,8 @@ const App = () => {
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="Name" component={Name} />
       <Stack.Screen name="DateOfBirth" component={DateOfBirth} />
-      <Stack.Screen name="Gender" component={Gender} />
-      <Stack.Screen name="Passion" component={Passion} />
+      <Stack.Screen name="gender" component={Gender} />
+      <Stack.Screen name="passion" component={Passion} />
       <Stack.Screen name="Ideal" component={Ideal} />
       <Stack.Screen name="Photo" component={Photo} />
       <Stack.Screen name="Dashboard" component={Dashboard} />

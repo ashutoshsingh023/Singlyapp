@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 // import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {
@@ -12,8 +12,11 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
+import {AppContext} from '../appContext/Context';
 
 const LoginPage = ({navigation}) => {
+  const {setData, IMG_BG} = useContext(AppContext);
+
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -82,10 +85,7 @@ const LoginPage = ({navigation}) => {
   //   }
   // };
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={15}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={15}>
       <View style={styles.container}>
         <Image source={require('./img/logo_new.png')} style={styles.logo} />
         <TextInput
@@ -109,8 +109,7 @@ const LoginPage = ({navigation}) => {
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line}></View>
         </View>
-        <TouchableOpacity
-          style={styles.facebookButton}>
+        <TouchableOpacity style={styles.facebookButton}>
           <Text style={styles.buttonText}>Login with Facebook</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.googleButton}>

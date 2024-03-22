@@ -6,58 +6,30 @@ import {
   ImageBackground,
   StyleSheet,
   TextInput,
+  Button,
 } from 'react-native';
-import {AppContext} from '../../../appContext/Context';
+import {AppContext} from '../../appContext/Context';
+import {DatePickerInput, DatePickerModal} from 'react-native-paper-dates';
+import DatePicker from 'react-native-date-picker';
 
 const DateOfBirth = ({navigation}) => {
   const [dob, setDob] = useState('');
-  const {data} = useContext(AppContext);
+  const {data, setData, IMG_BG} = useContext(AppContext);
+
+  const [date, setDate] = React.useState(undefined);
+  const [open, setOpen] = React.useState(false);
 
   console.log('====================================');
-  console.log('data', data);
+  console.log('dob', date);
   console.log('====================================');
 
   const handleContinue = () => {
-    // Validate date of birth input
-    if (dob.trim() === '') {
-      alert('Please enter your date of birth.');
-      return;
-    }
-
-    // Perform POST request to submit registration data
-    fetch('your-api-endpoint', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({dob}), // Include date of birth in the request body
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle response from the server
-        console.log('Response:', data);
-        // Navigate to the next screen
-        navigation.navigate('Gender');
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle error
-        alert(
-          'An error occurred while submitting your date of birth. Please try again.',
-        );
-      });
+    setData({...data, data: date});
+    navigation.navigate('gender');
   };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>What's your Date of Birth?</Text>
         <TextInput
@@ -67,6 +39,15 @@ const DateOfBirth = ({navigation}) => {
           onChangeText={e => setDob(e.target.value)}
           keyboardType="numeric"
           maxLength={10}
+          type="date"
+        />
+        <Button onPress={() => setOpen(true)} title="Pick a date" />
+        <DatePickerInput
+          locale="en"
+          label="Birthdate"
+          value={date}
+          onChange={d => setDate(d)}
+          inputMode="start"
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleContinue}>

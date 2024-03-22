@@ -6,7 +6,7 @@ import {AppRegistry} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {name as appName} from './app.json';
 import App from './App';
-import SinglyProvider from './appContext/Context';
+import SinglyProvider from './src/appContext/Context';
 
 const AppWithNavigation = () => (
   <SinglyProvider>

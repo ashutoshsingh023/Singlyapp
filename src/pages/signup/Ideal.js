@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,11 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
+import {AppContext} from '../../appContext/Context';
 
 const Ideal = ({navigation}) => {
+  const {data, setData, IMG_BG} = useContext(AppContext);
+
   const [selectedOption, setSelectedOption] = useState(null);
   const [orientation, setOrientation] = useState(null);
 
@@ -35,26 +38,8 @@ const Ideal = ({navigation}) => {
 
   const handleSubmit = async () => {
     if (selectedOption) {
-      try {
-        const response = await axios.post('your-api-endpoint', {
-          orientation: selectedOption,
-        });
-        console.log('Response:', response.data);
-        // Handle response from the server
-        if (response.data.success) {
-          // Navigate to the next screen
-          navigation.navigate('Photo');
-        } else {
-          // Handle server errors or invalid response
-          Alert.alert('Error', response.data.message);
-        }
-      } catch (error) {
-        console.error('Error submitting sexual orientation:', error);
-        Alert.alert(
-          'Error',
-          'An error occurred while submitting your sexual orientation. Please try again.',
-        );
-      }
+      setData({...data, ideal: selectedOption});
+      navigation.navigate('Photo');
     } else {
       Alert.alert(
         'Selection Required',
@@ -77,10 +62,7 @@ const Ideal = ({navigation}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>Ideal For</Text>
         <View style={styles.optionsContainer}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,11 @@ import {
   StyleSheet,
   ImageBackground,
 } from 'react-native';
+import {AppContext} from '../appContext/Context';
 
 const SignIn = ({navigation}) => {
+  const {data, setData, IMG_BG} = useContext(AppContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,6 +20,7 @@ const SignIn = ({navigation}) => {
 
   const handleContinue = () => {
     navigation.navigate('Name');
+    setData({...data, email: email, password: password});
 
     // Trim whitespace from email, password, first name, and last name
     const trimmedEmail = email.trim();
@@ -89,10 +93,7 @@ const SignIn = ({navigation}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('./img/bgsingly.jpg')}
-      style={styles.background}
-      blurRadius={25}>
+    <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View>
         <Text style={styles.title}>My Email and Password</Text>
       </View>
