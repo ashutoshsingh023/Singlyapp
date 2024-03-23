@@ -10,11 +10,10 @@ import {
   Modal,
 } from 'react-native';
 import {AppContext} from '../appContext/Context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SignUp = ({navigation}) => {
   const {setData, IMG_BG} = useContext(AppContext);
-
-  
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,6 +41,13 @@ const SignUp = ({navigation}) => {
                   onPress={() => navigation.navigate('Login')}
                   style={styles.button}>
                   <Text style={styles.buttonText}>Login</Text>
+                  <Ionicons
+                    testID="nextButton"
+                    name="arrow-forward"
+                    color="rgba(255, 255, 255, .9)"
+                    size={24}
+                    style={{backgroundColor: 'transparent'}}
+                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity

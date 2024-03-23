@@ -91,7 +91,6 @@ const Location = () => {
       console.error('Error sending location data:', error);
     }
   };
-
   return (
     <ImageBackground source={IMG_BG} style={styles.backgroundImage}>
       <View style={styles.container}>
