@@ -102,7 +102,7 @@ const Location = () => {
             <Text style={styles.text}>Location Services Disabled</Text>
             <Button
               title="Enable Location Services"
-              onPress={enableLocationServices}
+              // onPress={enableLocationServices}
             />
           </>
         )}

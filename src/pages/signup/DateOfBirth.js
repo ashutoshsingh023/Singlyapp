@@ -33,7 +33,7 @@ const DateOfBirth = ({navigation}) => {
     <ImageBackground source={IMG_BG} style={styles.background} blurRadius={25}>
       <View style={styles.container}>
         <Text style={styles.title}>What's your Date of Birth?</Text>
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="YYYY-MM-DD"
           value={dob}
@@ -41,7 +41,7 @@ const DateOfBirth = ({navigation}) => {
           keyboardType="numeric"
           maxLength={10}
           type="date"
-        />
+        /> */}
         <Button onPress={() => setOpen(true)} title="Pick a date" />
         <DatePickerInput
           locale="en"

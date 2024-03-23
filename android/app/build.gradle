@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
 
 /**
@@ -109,8 +109,8 @@ android {
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Specify font files
 ]
 
-apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
-}
+// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+// }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin

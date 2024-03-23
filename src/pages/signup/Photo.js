@@ -13,7 +13,7 @@ import axios from 'axios';
 import {AppContext} from '../../appContext/Context';
 
 const Photo = ({navigation}) => {
-  const {data, IMG_BG} = useContext(AppContext);
+  const {data, IMG_BG, SubmitHandler} = useContext(AppContext);
 
   const [photos, setPhotos] = useState([]);
   const [image, setImage] = useState(null);
@@ -54,6 +54,9 @@ const Photo = ({navigation}) => {
     if (photos.length === 0) {
       alert('Please select at least one photo.');
       return;
+    } else {
+      SubmitHandler();
+      navigation.navigate('Location');
     }
 
     try {
@@ -73,7 +76,6 @@ const Photo = ({navigation}) => {
       });
 
       if (response.data.success) {
-        navigation.navigate('Location');
       } else {
         alert(response.data.message);
       }
@@ -131,7 +133,8 @@ const Photo = ({navigation}) => {
       <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit}
-        disabled={photos.length !== 4}>
+        // disabled={photos.length !== 4}
+      >
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </ImageBackground>
