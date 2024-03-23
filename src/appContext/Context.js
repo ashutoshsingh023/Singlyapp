@@ -46,6 +46,7 @@ const SinglyProvider = ({children}) => {
       'sec-fetch-user': '?1',
       'sec-fetch-dest': 'document',
     },
+    data: data
   };
 
   axios

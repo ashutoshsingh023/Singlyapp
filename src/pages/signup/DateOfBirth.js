@@ -12,6 +12,7 @@ import {AppContext} from '../../appContext/Context';
 import {DatePickerInput, DatePickerModal} from 'react-native-paper-dates';
 import DatePicker from 'react-native-date-picker';
 
+
 const DateOfBirth = ({navigation}) => {
   const [dob, setDob] = useState('');
   const {data, setData, IMG_BG} = useContext(AppContext);
